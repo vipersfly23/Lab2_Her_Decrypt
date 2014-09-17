@@ -34,10 +34,10 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
                                             ; Main loop here
 ;-------------------------------------------------------------------------------
-		mov.w #stringArray,R12
+		mov.w #stringArray,R10
 		mov.b #stringLength, R15
-		mov.w #memStore, R13
-		mov.w #key, R14
+		mov.w #memStore, R14
+		mov.w #key, R13
 		mov.w #keyLength, R4
 
 		call #decryptMessage
@@ -57,24 +57,28 @@ endProgram jmp endProgram
 ;           the message by value.  Uses the decryptCharacter subroutine to decrypt
 ;           each byte of the message.  Stores theresults to the decrypted message
 ;           location.
-;Inputs: R14, R13, R12
+;Inputs: R4, R13, R14, R10, R15,R9
 ;Outputs: R12
-;Registers destroyed: R12
+;Registers destroyed: none
 ;-------------------------------------------------------------------------------
 
 
-decryptMessage:					;will change the value of R12 *NOTE*
-				push R13
+decryptMessage:					;will change the value of R10 *NOTE*
 				push R14
+				push R13
+				push R10
+				push R9
+				push R6
 				push R12
+
 				mov.b #0x0, R6	;decrypt string length to compare to
-restartKey		mov.w R14, R9
+restartKey		mov.w R13, R9
 
 				mov.b #0x0, R5 ;compare to length of key
-contDecrypt		mov.b @R12+,R7
+contDecrypt		mov.b @R10+,R12
 				call #decryptCharacter
-				mov.b R7, 0(R13)
-				inc.w R13
+				mov.b R12, 0(R14)
+				inc.w R14
 				inc.w R9
 				inc.w R6
 				inc.w R5
@@ -85,9 +89,13 @@ contDecrypt		mov.b @R12+,R7
 				cmp.w R4, R5
 				jz restartKey
 				jmp contDecrypt
-endSubRoutine		pop R14
-					pop R13
+endSubRoutine
 					pop R12
+					pop R6
+					pop R9
+					pop R13
+					pop R14
+					pop R10
 					ret
 ;-------------------------------------------------------------------------------
 ;Subroutine Name: decryptCharacter
@@ -95,14 +103,14 @@ endSubRoutine		pop R14
 ;Function: Decrypts a byte of data by XORing it with a key byte.  Returns the
 ;           decrypted byte in the same register the encrypted byte was passed in.
 ;           Expects both the encrypted data and key to be passed by value.
-;Inputs:
-;Outputs:
-;Registers destroyed:
+;Inputs: R9, R12
+;Outputs: R12
+;Registers destroyed: None
 ;-------------------------------------------------------------------------------
 
 
 decryptCharacter:
-				xor.b @R9,R7
+				xor.b @R9,R12
 				ret
 
 
