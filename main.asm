@@ -1,7 +1,12 @@
 ;-------------------------------------------------------------------------------
 ; MSP430 Assembler Code Template for use with TI Code Composer Studio
+; Lab 2 - ECE 382 Hex Decrypt Program
+; C2C Hunter Her, USAF / 15 Sept 2014 / 17 Sept 2014
+;
+; The purpose of this program is to implement a decryption of encrypted hex code given a key, and without a key.
 ;
 ;
+;***B-Functionality Complete***
 ;-------------------------------------------------------------------------------
             .cdecls C,LIST,"msp430.h"       ; Include device header file
 
@@ -14,7 +19,7 @@
                                             ; section
 .text
 stringArray		.byte		0xf8,0xb7,0x46,0x8c,0xb2,0x46,0xdf,0xac,0x42,0xcb,0xba,0x03,0xc7,0xba,0x5a,0x8c,0xb3,0x46,0xc2,0xb8,0x57,0xc4,0xff,0x4a,0xdf,0xff,0x12,0x9a,0xff,0x41,0xc5,0xab,0x50,0x82,0xff,0x03,0xe5,0xab,0x03,0xc3,0xb1,0x4f,0xd5,0xff,0x40,0xc3,0xb1,0x57,0xcd,0xb6,0x4d,0xdf,0xff,0x4f,0xc9,0xab,0x57,0xc9,0xad,0x50,0x80,0xff,0x53,0xc9,0xad,0x4a,0xc3,0xbb,0x50,0x80,0xff,0x42,0xc2,0xbb,0x03,0xdf,0xaf,0x42,0xcf,0xba,0x50,0x8f
-key				.byte		0xac, 0xdf,0x23
+key				.byte		0xac, 0xdf, 0x23
 
 
 stringLength .equ 0x52
@@ -29,34 +34,75 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
                                             ; Main loop here
 ;-------------------------------------------------------------------------------
-		mov.w #stringArray,R5
-		mov.b #stringLength, R9
-		mov.w #memStore, R8
+		mov.w #stringArray,R12
+		mov.b #stringLength, R15
+		mov.w #memStore, R13
+		mov.w #key, R14
 		mov.w #keyLength, R4
-restartKey		mov.w #keyLength,R4
-				mov.w #key, R7
-contDecrypt		mov.b @R5+,R12
-		mov.b @R7+, R10
 
-		call #decryptString
-		call #storeByte
-		inc.w R8
-		clrz
-		dec.w R9
-		jz endProgram
-		clrz
-		dec.w R4
-		jz restartKey
-		jne contDecrypt
+		call #decryptMessage
+
+
+
 
 endProgram jmp endProgram
+;-------------------------------------------------------------------------------
 
-decryptString:					;will change the value of R12 *NOTE*
-				xor.b R10,R12
-				ret
+;-------------------------------------------------------------------------------
+;Subroutine Name: decryptMessage
+;Author:
+;Function: Decrypts a string of bytes and stores the result in memory.  Accepts
+;           the address of the encrypted message, address of the key, and address
+;           of the decrypted message (pass-by-reference).  Accepts the length of
+;           the message by value.  Uses the decryptCharacter subroutine to decrypt
+;           each byte of the message.  Stores theresults to the decrypted message
+;           location.
+;Inputs: R14, R13, R12
+;Outputs: R12
+;Registers destroyed: R12
+;-------------------------------------------------------------------------------
 
-storeByte:
-				mov.b R12, 0(R8)
+
+decryptMessage:					;will change the value of R12 *NOTE*
+				push R13
+				push R14
+				push R12
+				mov.b #0x0, R6	;decrypt string length to compare to
+restartKey		mov.w R14, R9
+
+				mov.b #0x0, R5 ;compare to length of key
+contDecrypt		mov.b @R12+,R7
+				call #decryptCharacter
+				mov.b R7, 0(R13)
+				inc.w R13
+				inc.w R9
+				inc.w R6
+				inc.w R5
+				clrz
+				cmp.w R15, R6
+				jz endSubRoutine
+				clrz
+				cmp.w R4, R5
+				jz restartKey
+				jmp contDecrypt
+endSubRoutine		pop R14
+					pop R13
+					pop R12
+					ret
+;-------------------------------------------------------------------------------
+;Subroutine Name: decryptCharacter
+;Author:
+;Function: Decrypts a byte of data by XORing it with a key byte.  Returns the
+;           decrypted byte in the same register the encrypted byte was passed in.
+;           Expects both the encrypted data and key to be passed by value.
+;Inputs:
+;Outputs:
+;Registers destroyed:
+;-------------------------------------------------------------------------------
+
+
+decryptCharacter:
+				xor.b @R9,R7
 				ret
 
 
