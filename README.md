@@ -4,7 +4,7 @@ Lab2_Her_Decrypt
 The purpose of this lab is to write a program that will decrypt an encrypted message and store it into memory.
 
 ###Objective and Purpose
-The objective of this lab is to write a program that will decrypt and encrypted message using XOR method. 
+The objective of this lab is to write a program that will decrypt an ecrypted message using XOR method. The academic purpose of this lab is to learn to use sub-routines to help implement the program and fully understand the concept of push/pop of registers to ensure registers are safe from subroutines.
 
 Required Functionality [COMPLETED]:
   
@@ -57,7 +57,10 @@ The decryptMessage subroutine takes in an encrypted message and a key. The lengt
 ###Debugging/Testing
 
 #####Methodology
-  Below is a picture of flow chart in which I will base my coding on. Though it wasn't correct in how I used the subroutine, it served as a basis to my coding, and led me to my final project: **More included with pre-lab**
+  Below is a picture of flow chart in which I will base my coding on. Though it wasn't correct in how I used the subroutine, it
+  served as a basis to my coding, and led me to my final project: **More included with pre-lab**
+  
+  Preliminary Design:
   ![alt text](https://raw.githubusercontent.com/vipersfly23/Lab2_Her_Decrypt/master/FlowChart.gif "Flow Chart")
   
     My methodology was dividing and conquered. I knew the method was to XOR the bytes in the key with the encrypted message. I
@@ -66,7 +69,9 @@ The decryptMessage subroutine takes in an encrypted message and a key. The lengt
     commits.
    
     My biggest issue was learning to proper use the subroutine. From previous experiences, I instantly did everything in Main.
-    After conceptualizing the purpose of a subroutine, it was simple to move the code from main into the subroutines.
+    After conceptualizing the purpose of a subroutine, it was simple to move the code from main into the subroutines. This was
+    simple because the code was already functioning, thus all that was required was safeguarding the registers in the
+    subroutines and re-implementing the codes in the subroutines.
       
 
 #####Commit 1
