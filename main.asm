@@ -34,6 +34,8 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
                                             ; Main loop here
 ;-------------------------------------------------------------------------------
+		;Establish main registers and call the subroutine decryptMessage
+
 		mov.w #stringArray,R10
 		mov.b #stringLength, R15
 		mov.w #memStore, R14
@@ -41,6 +43,7 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 		mov.w #keyLength, R4
 
 		call #decryptMessage
+
 
 
 
@@ -71,24 +74,24 @@ decryptMessage:					;will change the value of R10 *NOTE*
 				push R6
 				push R12
 
-				mov.b #0x0, R6	;decrypt string length to compare to
-restartKey		mov.w R13, R9
+				mov.b #0x0, R6	;encrypted string length to compare to
+restartKey		mov.w R13, R9	;points R9 back to the first byte of the key
 
 				mov.b #0x0, R5 ;compare to length of key
-contDecrypt		mov.b @R10+,R12
-				call #decryptCharacter
-				mov.b R12, 0(R14)
-				inc.w R14
-				inc.w R9
-				inc.w R6
-				inc.w R5
-				clrz
-				cmp.w R15, R6
-				jz endSubRoutine
-				clrz
-				cmp.w R4, R5
-				jz restartKey
-				jmp contDecrypt
+contDecrypt		mov.b @R10+,R12	; stores the next encrypted message in R12
+				call #decryptCharacter ; XOR the key and the encrpyted message, stores it into R12
+				mov.b R12, 0(R14) ;  Stores R12 into the specified memory location in RAM
+				inc.w R14 ; Increment R14, to move to the next byte slot in RAM
+				inc.w R9 ; Shifts the pointer to the next byte of the key
+				inc.w R6	; increments the string length counter
+				inc.w R5	; increments the key length counter
+				clrz	; ensure the zero flag is clear
+				cmp.w R15, R6 	; checks to ensure there is still another byte in the encrypted message
+				jz endSubRoutine ;  if there isn't, end the program
+				clrz ; ensures z is clear again.
+				cmp.w R4, R5 ;  ensures that there is another byte in the key
+				jz restartKey ;  if not, load the first byte of the key again.
+				jmp contDecrypt ; continue t decrypt message
 endSubRoutine
 					pop R12
 					pop R6
@@ -110,7 +113,7 @@ endSubRoutine
 
 
 decryptCharacter:
-				xor.b @R9,R12
+				xor.b @R9,R12 ; XOR the value at the address in R9 and the value in R12
 				ret
 
 
