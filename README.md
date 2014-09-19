@@ -41,13 +41,14 @@ Register Definition:
 
 #####Main:
 
-![alt text](https://raw.githubusercontent.com/vipersfly23/Lab1_ECE382_Her/master/Main_Code.GIF "Main Code")
+![alt text](https://raw.githubusercontent.com/vipersfly23/Lab2_Her_Decrypt/3fd31b067e91324bc0ba4489e32ce79b90e03e66/Main.GIF "Main Code")
 
 The point of the main is established and defines the registers as stated in the register definition. The main also calls the subroutine.
 
 #####B-Functionality
 
-![alt text](https://raw.githubusercontent.com/vipersfly23/Lab1_ECE382_Her/master/Test_Success.GIF "Test Results")
+![alt text](https://raw.githubusercontent.com/vipersfly23/Lab2_Her_Decrypt/master/dMessage.GIF "decryptMessage")
+![alt text](https://raw.githubusercontent.com/vipersfly23/Lab2_Her_Decrypt/master/dChar.GIF "decryptCharacter")
 This program not only meets the required functionality, but also meets the requirement of the B-functionality. This program takes in a N-byte long encrypted message, and a N-byte long key and decrypts the encrypted message using the given key by the method of XOR.
 
 The decryptMessage subroutine takes in an encrypted message and a key. The length of both the encrypted message and key is know. It then calls the subroutine decryptCharacter which decrypts the encrypted message applying XOR of encrypted message and key one at a time. The output is stored into RAM in decryptMessage and the program continues to cycle through until the message is fully decrypt.
@@ -56,6 +57,8 @@ The decryptMessage subroutine takes in an encrypted message and a key. The lengt
 ###Debugging/Testing
 
 #####Methodology
+  Below is a picture of flow chart in which I will base my coding on. Though it wasn't correct in how I used the subroutine, it served as a basis to my coding, and led me to my final project: **More included with pre-lab**
+  ![alt text](https://raw.githubusercontent.com/vipersfly23/Lab2_Her_Decrypt/master/FlowChart.gif "Flow Chart")
   
     My methodology was dividing and conquered. I knew the method was to XOR the bytes in the key with the encrypted message. I
     instantly knew there had to be a pointer to the message and one for the key. Building on that concept, lead me to the
@@ -75,8 +78,9 @@ The decryptMessage subroutine takes in an encrypted message and a key. The lengt
    Worked from pseudo codes and started to write more code, nothing tested yet.
    
 #####Commit 3
-
+    
     Completed B functionality for the program. Test pass the required functionality, and decrypted the message to provide a
+    
     hint for the A-functionality.
 
 #####Commit 4
@@ -103,7 +107,7 @@ Key:
 
 My Result:
 **PASS**
-![alt text](https://raw.githubusercontent.com/vipersfly23/Lab1_ECE382_Her/master/Test_Success.GIF "Test Results")
+![alt text](https://raw.githubusercontent.com/vipersfly23/Lab2_Her_Decrypt/master/bFunction.GIF "Test Results")
 
 
 ###Conclusions/Lessons Learned
