@@ -36,19 +36,19 @@ StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
 ;-------------------------------------------------------------------------------
 		;Establish main registers and call the subroutine decryptMessage
 
-		mov.w #stringArray,R10
-		mov.b #stringLength, R15
-		mov.w #memStore, R14
-		mov.w #key, R13
-		mov.w #keyLength, R4
+			mov.w #stringArray,R10
+			mov.b #stringLength, R15
+			mov.w #memStore, R14
+			mov.w #key, R13
+			mov.w #keyLength, R4
 
-		call #decryptMessage
-
-
+			call #decryptMessage
 
 
 
-endProgram jmp endProgram
+
+
+endProgram	jmp endProgram
 ;-------------------------------------------------------------------------------
 
 ;-------------------------------------------------------------------------------
@@ -93,13 +93,13 @@ contDecrypt		mov.b @R10+,R12	; stores the next encrypted message in R12
 				jz restartKey ;  if not, load the first byte of the key again.
 				jmp contDecrypt ; continue t decrypt message
 endSubRoutine
-					pop R12
-					pop R6
-					pop R9
-					pop R13
-					pop R14
-					pop R10
-					ret
+				pop R12
+				pop R6
+				pop R9
+				pop R13
+				pop R14
+				pop R10
+				ret
 ;-------------------------------------------------------------------------------
 ;Subroutine Name: decryptCharacter
 ;Author:
